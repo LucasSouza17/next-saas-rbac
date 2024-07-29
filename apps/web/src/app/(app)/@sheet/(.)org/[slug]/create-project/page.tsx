@@ -1,7 +1,6 @@
+import { ProjectForm } from '@/app/(app)/org/[slug]/create-project/project-form'
 import { InterceptedSheetContent } from '@/components/intercepted-sheet-content'
 import { Sheet, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-
-import { OrganizationForm } from '../../org/organization-form'
 
 export default function CreateOrganization() {
   return (
@@ -12,7 +11,7 @@ export default function CreateOrganization() {
         </SheetHeader>
 
         <div className="py-4">
-          <OrganizationForm />
+          <ProjectForm />
         </div>
       </InterceptedSheetContent>
     </Sheet>

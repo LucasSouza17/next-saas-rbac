@@ -1,8 +1,8 @@
 import { Header } from '@/components/header'
 
-import { OrganizationForm } from './organization-form'
+import { OrganizationForm } from '../org/organization-form'
 
-export default function CreateOrganizationPage() {
+export default function CreateOrganization() {
   return (
     <div className="space-y-4 p-4">
       <Header />
