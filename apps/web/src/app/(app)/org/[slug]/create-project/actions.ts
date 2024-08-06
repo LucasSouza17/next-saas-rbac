@@ -1,6 +1,7 @@
 'use server'
 
 import { HTTPError } from 'ky'
+import { revalidateTag } from 'next/cache'
 import { z } from 'zod'
 
 import { getCurrentOrg } from '@/auth/auth'
@@ -13,6 +14,8 @@ const projectSchema = z.object({
 
 export async function createProjectAction(data: FormData) {
   const result = projectSchema.safeParse(Object.fromEntries(data))
+
+  const currentOrg = getCurrentOrg()
 
   if (!result.success) {
     const errors = result.error.flatten().fieldErrors
@@ -28,10 +31,12 @@ export async function createProjectAction(data: FormData) {
 
   try {
     await createProject({
-      org: getCurrentOrg()!,
+      org: currentOrg!,
       name,
       description,
     })
+
+    revalidateTag(`${currentOrg}/projects`)
   } catch (err) {
     if (err instanceof HTTPError) {
       const { message } = await err.response.json()
@@ -43,7 +48,6 @@ export async function createProjectAction(data: FormData) {
       }
     }
 
-    console.error(err)
     return {
       success: false,
       message: 'Unexpected error. Please, try again later.',
@@ -53,7 +57,7 @@ export async function createProjectAction(data: FormData) {
 
   return {
     success: true,
-    message: 'Successfully saved the organization.',
+    message: 'Successfully created project.',
     errors: null,
   }
 }
